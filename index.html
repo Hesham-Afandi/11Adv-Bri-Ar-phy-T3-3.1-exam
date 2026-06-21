@@ -1,1 +1,346 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌀 Grade 11 Advanced Inspire - Rotational KE & Moment of Inertia (3.1)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        body.en-mode { font-family: 'Inter', sans-serif; }
+        .correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+        .incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+        .formula { font-family: 'Times New Roman', serif; font-style: italic; direction: ltr; display: inline-block; }
+        .timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+        @keyframes pulse { 50% { opacity: 0.7; } }
+        @media print { .no-print { display: none !important; } }
+        .success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+        .grade-excellent { background: #dcfce7; color: #166534; }
+        .grade-good { background: #fef3c7; color: #92400e; }
+        .grade-pass { background: #dbeafe; color: #1e40af; }
+        .grade-fail { background: #fee2e2; color: #991b1b; }
+        .lang-switch {
+            position: fixed; top: 16px; left: 16px; z-index: 100;
+            background: white; padding: 6px; border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px;
+            border: 2px solid #0d9488;
+        }
+        [dir="ltr"] .lang-switch { left: auto; right: 16px; }
+        .lang-btn {
+            padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold;
+            transition: all 0.3s; border: none; font-size: 0.875rem;
+            background: transparent; color: #6b7280;
+        }
+        .lang-btn.active { background: #0d9488; color: white; box-shadow: 0 2px 6px rgba(13,148,136,0.4); }
+        .lang-btn:hover:not(.active) { background: #f0fdfa; color: #0d9488; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 md:p-8 min-h-screen">
 
+    <div class="lang-switch no-print">
+        <button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+        <button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+    </div>
+
+    <div id="timer-container" class="max-w-4xl mx-auto mb-4 text-center no-print">
+        <div class="bg-white p-4 rounded-xl shadow-md inline-block border-2 border-teal-100">
+            <span class="text-gray-600 ml-2" data-ar="⏱️ الوقت المتبقي:" data-en="⏱️ Time Remaining:">⏱️ الوقت المتبقي:</span>
+            <span id="timer" class="text-2xl font-bold text-teal-600 font-mono">60:00</span>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+        <button onclick="toggleAnswers()" class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2 rounded-lg font-medium transition shadow cursor-pointer" data-ar="👁️ إظهار / إخفاء الإجابات" data-en="👁️ Show / Hide Answers">👁️ إظهار / إخفاء الإجابات</button>
+        <button onclick="window.print()" class="bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded-lg font-medium transition shadow cursor-pointer" data-ar="🖨️ طباعة / PDF" data-en="🖨️ Print / PDF">🖨️ طباعة / PDF</button>
+    </div>
+
+    <header class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md mb-8 border-r-4 border-teal-600">
+        <div class="text-center">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2" data-ar="🌀 فيزياء الصف الحادي عشر متقدم - Inspire" data-en="🌀 Grade 11 Advanced Physics - Inspire">🌀 فيزياء الصف الحادي عشر متقدم - Inspire</h1>
+            <h2 class="text-lg text-teal-600 font-semibold" data-ar="الدرس 3.1: الطاقة الدورانية وعزم القصور" data-en="Lesson 3.1: Rotational KE & Moment of Inertia">الدرس 3.1: الطاقة الدورانية وعزم القصور</h2>
+            <p class="text-sm text-gray-600 mt-2" data-ar="عزم القصور، الطاقة الدورانية، عزم القوة، والتدحرج بدون انزلاق" data-en="Moment of Inertia, Rotational KE, Torque & Rolling Without Slipping">عزم القصور، الطاقة الدورانية، عزم القوة، والتدحرج بدون انزلاق</p>
+        </div>
+        <div class="mt-4 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+            <span><span data-ar="📅 التاريخ:" data-en="📅 Date:">📅 التاريخ:</span> <input type="text" class="border-b border-gray-400 bg-transparent w-28 text-center"></span>
+            <span><span data-ar="👤 الاسم:" data-en="👤 Name:">👤 الاسم:</span> <input type="text" id="studentName" class="border-b border-gray-400 bg-transparent w-32 text-center" placeholder="Enter name"></span>
+            <span><span data-ar="🏫 الشعبة:" data-en="🏫 Class:">🏫 الشعبة:</span> <input type="text" id="studentClass" class="border-b border-gray-400 bg-transparent w-28 text-center" placeholder="Class"></span>
+            <span><span data-ar="⏱️ المدة: 60 دقيقة" data-en="⏱️ Duration: 60 min">⏱️ المدة: 60 دقيقة</span></span>
+            <span><span data-ar="📊 المجموع: 100 درجة" data-en="📊 Total: 100 pts">📊 المجموع: 100 درجة</span></span>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-8" id="exam-content"></main>
+
+    <div class="text-center no-print pb-8 mt-8">
+        <button onclick="gradeExam()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-lg px-10 py-4 rounded-xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer" data-ar="📝 تسليم وتصحيح الامتحان" data-en="📝 Submit & Grade Exam">📝 تسليم وتصحيح الامتحان</button>
+    </div>
+
+    <div id="results-panel" class="max-w-4xl mx-auto mt-8 bg-white p-8 rounded-2xl shadow-2xl border-t-4 border-emerald-500 hidden no-print">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center" data-ar="📊 نتائج الامتحان" data-en="📊 Exam Results">📊 نتائج الامتحان</h2>
+        <div class="grid md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-blue-50 p-4 rounded-xl text-center"><p data-ar="اسم الطالب" data-en="Student Name">اسم الطالب</p><p id="res-name" class="font-bold text-xl text-teal-700">-</p></div>
+            <div class="bg-purple-50 p-4 rounded-xl text-center"><p data-ar="التاريخ" data-en="Date">التاريخ</p><p id="res-date" class="font-bold text-xl text-purple-700">-</p></div>
+            <div class="bg-emerald-50 p-4 rounded-xl text-center"><p data-ar="المجموع" data-en="Score">المجموع</p><p id="res-total" class="font-bold text-3xl text-emerald-600">0 / 100</p></div>
+        </div>
+        <div class="text-center mb-6">
+            <span id="success-badge" class="success-badge grade-excellent">-</span>
+            <p id="success-percent" class="text-4xl font-bold text-emerald-600 mt-2">100%</p>
+            <p class="text-sm text-gray-500" data-ar="نسبة النجاح" data-en="Success Rate">نسبة النجاح</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl mb-6">
+            <h3 class="font-bold text-lg mb-4 text-gray-800" data-ar="📈 تفصيل الأداء حسب القسم:" data-en="📈 Performance Breakdown:">📈 تفصيل الأداء حسب القسم:</h3>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center"><span class="text-gray-700" data-ar="عزم القصور الذاتي" data-en="Moment of Inertia">عزم القصور الذاتي</span><span id="sec1-score" class="font-bold text-teal-600">0/4</span></div>
+                <div class="flex justify-between items-center"><span class="text-gray-700" data-ar="الأشكال الهندسية الشائعة" data-en="Common Shapes">الأشكال الهندسية الشائعة</span><span id="sec2-score" class="font-bold text-teal-600">0/4</span></div>
+                <div class="flex justify-between items-center"><span class="text-gray-700" data-ar="الطاقة الحركية الدورانية" data-en="Rotational Kinetic Energy">الطاقة الحركية الدورانية</span><span id="sec3-score" class="font-bold text-teal-600">0/4</span></div>
+                <div class="flex justify-between items-center"><span class="text-gray-700" data-ar="عزم القوة (Torque)" data-en="Torque">عزم القوة (Torque)</span><span id="sec4-score" class="font-bold text-teal-600">0/4</span></div>
+                <div class="flex justify-between items-center"><span class="text-gray-700" data-ar="التدحرج بدون انزلاق" data-en="Rolling Without Slipping">التدحرج بدون انزلاق</span><span id="sec5-score" class="font-bold text-teal-600">0/4</span></div>
+            </div>
+        </div>
+        <div class="text-center mb-6">
+            <button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white text-lg px-8 py-3 rounded-xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer" data-ar="📧 إرسال النتائج للمعلم" data-en="📧 Send Results to Teacher">📧 إرسال النتائج للمعلم</button>
+            <p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+        </div>
+        <div class="flex gap-3 justify-center">
+            <button onclick="window.print()" class="bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold" data-ar="🖨️ طباعة النتائج" data-en="🖨️ Print Results">🖨️ طباعة النتائج</button>
+        </div>
+    </div>
+
+    <footer class="max-w-4xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+        © <span data-ar="الفيزياء للصف الحادي عشر متقدم - Inspire | الدرس 3.1: الطاقة الدورانية وعزم القصور" data-en="Grade 11 Advanced Physics - Inspire | Lesson 3.1: Rotational KE & Moment of Inertia">الفيزياء للصف الحادي عشر متقدم - Inspire | الدرس 3.1: الطاقة الدورانية وعزم القصور</span> | Mr. Mohammed Hesham
+    </footer>
+
+<script>
+const examData = {
+    sections: [
+        {
+            id: 'sec1',
+            title: { ar: '🔹 الجزء الأول: عزم القصور الذاتي', en: '🔹 Part 1: Moment of Inertia' },
+            questions: [
+                { q: { ar: 'عزم القصور الذاتي (I) يعتمد على:', en: 'Moment of inertia (I) depends on:' }, options: [{ ar: 'الكتلة فقط', en: 'Mass only' }, { ar: 'الكتلة وتوزيعها حول محور الدوران', en: 'Mass and its distribution around the axis of rotation' }, { ar: 'السرعة الزاوية فقط', en: 'Angular velocity only' }, { ar: 'نصف القطر فقط', en: 'Radius only' }], correct: 1, answer: { ar: 'عزم القصور يعتمد على كتلة الجسم وتوزيع هذه الكتلة حول محور الدوران', en: 'Moment of inertia depends on body mass and distribution of this mass around rotation axis' } },
+                { q: { ar: 'وحدة عزم القصور الذاتي في النظام الدولي هي:', en: 'The SI unit of moment of inertia is:' }, options: [{ ar: 'kg·m', en: 'kg·m' }, { ar: 'kg·m/s', en: 'kg·m/s' }, { ar: 'kg·m²', en: 'kg·m²' }, { ar: 'N·m', en: 'N·m' }], correct: 2, answer: { ar: 'I = Σmᵢrᵢ² → kg·m²', en: 'I = Σmᵢrᵢ² → kg·m²' } },
+                { q: { ar: 'عزم القصور الذاتي لجسيم كتلته m على بعد r من المحور:', en: 'Moment of inertia of a particle of mass m at distance r from axis:' }, options: [{ ar: 'I = mr²', en: 'I = mr²' }, { ar: 'I = ½mr²', en: 'I = ½mr²' }, { ar: 'I = m/r', en: 'I = m/r' }, { ar: 'I = mr', en: 'I = mr' }], correct: 0, answer: { ar: 'للجسيم المفرد: I = mr²', en: 'For a single particle: I = mr²' } },
+                { q: { ar: 'قانون المحور المتوازي (Parallel Axis Theorem) ينص على:', en: 'The Parallel Axis Theorem states:' }, options: [{ ar: 'I = I_cm - Md²', en: 'I = I_cm - Md²' }, { ar: 'I = I_cm + Md²', en: 'I = I_cm + Md²' }, { ar: 'I = I_cm × d', en: 'I = I_cm × d' }, { ar: 'I = I_cm / d²', en: 'I = I_cm / d²' }], correct: 1, answer: { ar: 'I = I_cm + Md² حيث d المسافة بين المحورين', en: 'I = I_cm + Md² where d is distance between axes' } }
+            ]
+        },
+        {
+            id: 'sec2',
+            title: { ar: '🔹 الجزء الثاني: الأشكال الهندسية الشائعة', en: '🔹 Part 2: Common Shapes' },
+            questions: [
+                { q: { ar: 'عزم القصور الذاتي لقرص صلب (أو أسطوانة) حول محوره المركزي:', en: 'Moment of inertia of a solid disk (or cylinder) about its central axis:' }, options: [{ ar: 'I = MR²', en: 'I = MR²' }, { ar: 'I = ½MR²', en: 'I = ½MR²' }, { ar: 'I = ¼MR²', en: 'I = ¼MR²' }, { ar: 'I = ²⁄₅MR²', en: 'I = ²⁄₅MR²' }], correct: 1, answer: { ar: 'القرص/الأسطوانة: I = ½MR²', en: 'Disk/Cylinder: I = ½MR²' } },
+                { q: { ar: 'عزم القصور الذاتي لحلقة (أو أنبوب مجوف) حول محورها:', en: 'Moment of inertia of a ring (or hollow tube) about its axis:' }, options: [{ ar: 'I = MR²', en: 'I = MR²' }, { ar: 'I = ½MR²', en: 'I = ½MR²' }, { ar: 'I = ²⁄₅MR²', en: 'I = ²⁄₅MR²' }, { ar: 'I = ¹⁄₁₂ML²', en: 'I = ¹⁄₁₂ML²' }], correct: 0, answer: { ar: 'الحلقة: كل الكتلة على بعد R من المحور → I = MR²', en: 'Ring: all mass at distance R from axis → I = MR²' } },
+                { q: { ar: 'عزم القصور الذاتي لكرة صلبة حول محورها:', en: 'Moment of inertia of a solid sphere about its axis:' }, options: [{ ar: 'I = ½MR²', en: 'I = ½MR²' }, { ar: 'I = MR²', en: 'I = MR²' }, { ar: 'I = ²⁄₅MR²', en: 'I = ²⁄₅MR²' }, { ar: 'I = ²⁄₃MR²', en: 'I = ²⁄₃MR²' }], correct: 2, answer: { ar: 'الكرة الصلبة: I = ²⁄₅MR²', en: 'Solid sphere: I = ²⁄₅MR²' } },
+                { q: { ar: 'عزم القصور الذاتي لقضيب حول محور يمر بمنتصفه:', en: 'Moment of inertia of a rod about an axis through its center:' }, options: [{ ar: 'I = ¹⁄₃ML²', en: 'I = ¹⁄₃ML²' }, { ar: 'I = ¹⁄₁₂ML²', en: 'I = ¹⁄₁₂ML²' }, { ar: 'I = ½ML²', en: 'I = ½ML²' }, { ar: 'I = ML²', en: 'I = ML²' }], correct: 1, answer: { ar: 'قضيب من المنتصف: I = ¹⁄₁₂ML² (ومن الطرف: I = ¹⁄₃ML²)', en: 'Rod from center: I = ¹⁄₁₂ML² (from end: I = ¹⁄₃ML²)' } }
+            ]
+        },
+        {
+            id: 'sec3',
+            title: { ar: '🔹 الجزء الثالث: الطاقة الحركية الدورانية', en: '🔹 Part 3: Rotational Kinetic Energy' },
+            questions: [
+                { q: { ar: 'صيغة الطاقة الحركية الدورانية هي:', en: 'The formula for rotational kinetic energy is:' }, options: [{ ar: 'KE_rot = ½Iω²', en: 'KE_rot = ½Iω²' }, { ar: 'KE_rot = Iω', en: 'KE_rot = Iω' }, { ar: 'KE_rot = ½mv²', en: 'KE_rot = ½mv²' }, { ar: 'KE_rot = τθ', en: 'KE_rot = τθ' }], correct: 0, answer: { ar: 'الطاقة الحركية الدورانية: KE_rot = ½Iω² (نظير ½mv² في الحركة الخطية)', en: 'Rotational KE: KE_rot = ½Iω² (analog of ½mv² in linear motion)' } },
+                { q: { ar: 'إذا تضاعفت السرعة الزاوية لجسم دوار، فإن طاقته الحركية الدورانية:', en: 'If angular velocity of a rotating body doubles, its rotational KE:' }, options: [{ ar: 'تتضاعف', en: 'Doubles' }, { ar: 'تزداد 4 أضعاف', en: 'Increases 4 times' }, { ar: 'تبقى ثابتة', en: 'Remains constant' }, { ar: 'تقل للنصف', en: 'Halves' }], correct: 1, answer: { ar: 'KE ∝ ω²، فتضاعف ω يعني 2² = 4 أضعاف', en: 'KE ∝ ω², so doubling ω means 2² = 4 times' } },
+                { q: { ar: 'قرص كتلته 4 kg ونصف قطره 0.5 m يدور بسرعة 10 rad/s. طاقته الدورانية:', en: 'A disk of mass 4 kg and radius 0.5 m rotates at 10 rad/s. Its rotational KE:' }, options: [{ ar: '25 J', en: '25 J' }, { ar: '50 J', en: '50 J' }, { ar: '100 J', en: '100 J' }, { ar: '200 J', en: '200 J' }], correct: 0, answer: { ar: 'I = ½MR² = ½(4)(0.25) = 0.5 kg·m², KE = ½(0.5)(100) = 25 J', en: 'I = ½MR² = 0.5 kg·m², KE = ½(0.5)(100) = 25 J' } },
+                { q: { ar: 'الجسم الذي يتدحرج (يدور ويتحرك انتقالياً) يمتلك:', en: 'A rolling object (rotating and translating) has:' }, options: [{ ar: 'طاقة خطية فقط', en: 'Only linear energy' }, { ar: 'طاقة دورانية فقط', en: 'Only rotational energy' }, { ar: 'طاقة خطية ودورانية معاً', en: 'Both linear and rotational energy' }, { ar: 'لا طاقة حركية', en: 'No kinetic energy' }], correct: 2, answer: { ar: 'KE_total = ½mv² + ½Iω² (خطية + دورانية)', en: 'KE_total = ½mv² + ½Iω² (linear + rotational)' } }
+            ]
+        },
+        {
+            id: 'sec4',
+            title: { ar: '🔹 الجزء الرابع: عزم القوة (Torque)', en: '🔹 Part 4: Torque' },
+            questions: [
+                { q: { ar: 'عزم القوة (τ) هو:', en: 'Torque (τ) is:' }, options: [{ ar: 'نظير الكتلة في الحركة الخطية', en: 'Analog of mass in linear motion' }, { ar: 'نظير القوة في الحركة الدورانية', en: 'Analog of force in rotational motion' }, { ar: 'نظير السرعة في الحركة الدورانية', en: 'Analog of velocity in rotational motion' }, { ar: 'نظير الطاقة في الحركة الخطية', en: 'Analog of energy in linear motion' }], correct: 1, answer: { ar: 'عزم القوة هو نظير القوة في الحركة الدورانية (يسبب تغيراً في الحركة الدورانية)', en: 'Torque is the analog of force in rotational motion (causes change in rotational motion)' } },
+                { q: { ar: 'صيغة عزم القوة هي:', en: 'The formula for torque is:' }, options: [{ ar: 'τ = r × F × sin(θ) = Iα', en: 'τ = r × F × sin(θ) = Iα' }, { ar: 'τ = m × a', en: 'τ = m × a' }, { ar: 'τ = ½Iω²', en: 'τ = ½Iω²' }, { ar: 'τ = Iω', en: 'τ = Iω' }], correct: 0, answer: { ar: 'τ = rF sin θ = Iα (نظير F = ma)', en: 'τ = rF sin θ = Iα (analog of F = ma)' } },
+                { q: { ar: 'قوة مقدارها 20 N تؤثر على مقبض باب على بعد 0.5 m من المحرك بزاوية 90°. عزم القوة:', en: 'A force of 20 N acts on a door handle at 0.5 m from hinge at 90°. Torque:' }, options: [{ ar: '10 N·m', en: '10 N·m' }, { ar: '40 N·m', en: '40 N·m' }, { ar: '5 N·m', en: '5 N·m' }, { ar: '100 N·m', en: '100 N·m' }], correct: 0, answer: { ar: 'τ = rF sin(90°) = 0.5 × 20 × 1 = 10 N·m', en: 'τ = rF sin(90°) = 0.5 × 20 × 1 = 10 N·m' } },
+                { q: { ar: 'العلاقة بين عزم القوة والعجلة الزاوية هي:', en: 'The relationship between torque and angular acceleration is:' }, options: [{ ar: 'τ = I/α', en: 'τ = I/α' }, { ar: 'τ = Iα', en: 'τ = Iα' }, { ar: 'τ = I + α', en: 'τ = I + α' }, { ar: 'τ = α/I', en: 'τ = α/I' }], correct: 1, answer: { ar: 'τ = Iα (نظير F = ma في الحركة الخطية)', en: 'τ = Iα (analog of F = ma in linear motion)' } }
+            ]
+        },
+        {
+            id: 'sec5',
+            title: { ar: '🔹 الجزء الخامس: التدحرج بدون انزلاق', en: '🔹 Part 5: Rolling Without Slipping' },
+            questions: [
+                { q: { ar: 'شرط التدحرج بدون انزلاق هو:', en: 'The condition for rolling without slipping is:' }, options: [{ ar: 'v = rω', en: 'v = rω' }, { ar: 'v = r/ω', en: 'v = r/ω' }, { ar: 'v = ω/r', en: 'v = ω/r' }, { ar: 'v = r²ω', en: 'v = r²ω' }], correct: 0, answer: { ar: 'السرعة الخطية = نصف القطر × السرعة الزاوية (v = rω)', en: 'Linear velocity = radius × angular velocity (v = rω)' } },
+                { q: { ar: 'الطاقة الكلية لكرة صلبة تتدحرج بدون انزلاق:', en: 'Total kinetic energy of a solid sphere rolling without slipping:' }, options: [{ ar: '½mv²', en: '½mv²' }, { ar: '½Iω²', en: '½Iω²' }, { ar: '⁷⁄₁₀mv²', en: '⁷⁄₁₀mv²' }, { ar: 'mv²', en: 'mv²' }], correct: 2, answer: { ar: 'KE = ½mv² + ½(²⁄₅mr²)(v/r)² = ½mv² + ¹⁄₅mv² = ⁷⁄₁₀mv²', en: 'KE = ½mv² + ½(²⁄₅mr²)(v/r)² = ⁷⁄₁₀mv²' } },
+                { q: { ar: 'أسطوانة، كرة، وحلقة تتدحرج من نفس المنحدر. أيها يصل أولاً؟', en: 'A cylinder, sphere, and ring roll down the same incline. Which reaches first?' }, options: [{ ar: 'الحلقة (أكبر I)', en: 'Ring (largest I)' }, { ar: 'الكرة (أصغر I نسبة إلى mr²)', en: 'Sphere (smallest I relative to mr²)' }, { ar: 'الأسطوانة', en: 'Cylinder' }, { ar: 'يصلون معاً', en: 'They arrive together' }], correct: 1, answer: { ar: 'الكرة I = ²⁄₅MR² (الأصغر) → أكبر طاقة خطية → أسرع', en: 'Sphere I = ²⁄₅MR² (smallest) → most linear KE → fastest' } },
+                { q: { ar: 'أسطوانة صلبة كتلتها 2 kg ونصف قطرها 0.2 m تتدحرج بسرعة 3 m/s. طاقتها الكلية:', en: 'A solid cylinder of mass 2 kg and radius 0.2 m rolls at 3 m/s. Total KE:' }, options: [{ ar: '9 J', en: '9 J' }, { ar: '13.5 J', en: '13.5 J' }, { ar: '18 J', en: '18 J' }, { ar: '27 J', en: '27 J' }], correct: 1, answer: { ar: 'KE = ½mv² + ½(½mr²)(v/r)² = ½mv² + ¼mv² = ¾mv² = ¾(2)(9) = 13.5 J', en: 'KE = ¾mv² = ¾(2)(9) = 13.5 J' } }
+            ]
+        }
+    ]
+};
+
+let currentLang = 'ar';
+let timeRemaining = 3600;
+let timerInterval;
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.body.classList.toggle('en-mode', lang === 'en');
+    document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+    });
+    renderExam();
+}
+
+function renderExam() {
+    const container = document.getElementById('exam-content');
+    const labels = {
+        ar: { option: ['أ', 'ب', 'ج', 'د'], answer: '✅ الإجابة:' },
+        en: { option: ['A', 'B', 'C', 'D'], answer: '✅ Answer:' }
+    };
+    const lbl = labels[currentLang];
+    const isRTL = currentLang === 'ar';
+
+    let html = '';
+    let globalIdx = 1;
+
+    examData.sections.forEach((section) => {
+        html += `<section class="bg-white p-6 rounded-xl shadow-lg">
+            <h2 class="text-xl font-bold mb-4 text-teal-700">${section.title[currentLang]}</h2>
+            <ol class="space-y-4 text-sm">`;
+
+        section.questions.forEach((q) => {
+            const borderSide = isRTL ? 'border-r-4 pr-4' : 'border-l-4 pl-4';
+            html += `<li class="${borderSide} border-teal-500 py-2" id="q-${globalIdx}">
+                <strong>${globalIdx}.</strong> ${q.q[currentLang]}<br>`;
+
+            q.options.forEach((opt, oIdx) => {
+                const radioSide = isRTL ? 'mr-4 ml-2' : 'ml-4 mr-2';
+                html += `<label class="cursor-pointer block mt-1 ${isRTL ? 'mr-4' : 'ml-4'}">
+                    <input type="radio" name="q${globalIdx}" value="${String.fromCharCode(97 + oIdx)}" class="${radioSide}">
+                    ${lbl.option[oIdx]}) ${opt[currentLang]}
+                </label>`;
+            });
+
+            html += `<div class="answer-box text-green-700 mt-2 font-medium hidden">
+                ${lbl.answer} ${lbl.option[q.correct]}) ${q.options[q.correct][currentLang]} — ${q.answer[currentLang]}
+            </div></li>`;
+            globalIdx++;
+        });
+
+        html += `</ol></section>`;
+    });
+
+    container.innerHTML = html;
+}
+
+function startTimer() {
+    document.getElementById('timer-container').style.display = 'block';
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        const timerEl = document.getElementById('timer');
+        timerEl.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+        if (timeRemaining <= 300) timerEl.classList.add('timer-warning');
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert(currentLang === 'ar' ? "انتهى الوقت! سيتم تسليم الامتحان تلقائياً." : "Time's up!");
+            gradeExam();
+        }
+    }, 1000);
+}
+
+function toggleAnswers() {
+    document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden'));
+}
+
+function gradeExam() {
+    let correctCount = 0;
+    const correctAnswersLetters = ['b','c','a','b','b','a','c','b','a','b','c','c','b','a','c','b','a','c','b','c'];
+    let sec1=0, sec2=0, sec3=0, sec4=0, sec5=0;
+
+    for (let i = 1; i <= 20; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const li = document.getElementById(`q-${i}`);
+        const isCorrect = selected && selected.value === correctAnswersLetters[i-1];
+
+        if (isCorrect) {
+            correctCount++;
+            li.classList.add('correct');
+            li.classList.remove('incorrect');
+            if (i <= 4) sec1++;
+            else if (i <= 8) sec2++;
+            else if (i <= 12) sec3++;
+            else if (i <= 16) sec4++;
+            else sec5++;
+        } else {
+            li.classList.add('incorrect');
+            li.classList.remove('correct');
+        }
+    }
+
+    const score = (correctCount / 20) * 100;
+    const successRate = Math.round(score);
+
+    document.getElementById('res-total').textContent = `${Math.round(score)} / 100`;
+    document.getElementById('res-name').textContent = document.getElementById('studentName').value || (currentLang === 'ar' ? 'طالب' : 'Student');
+    document.getElementById('res-date').textContent = new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
+    document.getElementById('sec1-score').textContent = `${sec1}/4`;
+    document.getElementById('sec2-score').textContent = `${sec2}/4`;
+    document.getElementById('sec3-score').textContent = `${sec3}/4`;
+    document.getElementById('sec4-score').textContent = `${sec4}/4`;
+    document.getElementById('sec5-score').textContent = `${sec5}/4`;
+
+    const badge = document.getElementById('success-badge');
+    document.getElementById('success-percent').textContent = `${successRate}%`;
+
+    if (currentLang === 'ar') {
+        if (successRate >= 90) { badge.textContent = 'ممتاز'; badge.className = 'success-badge grade-excellent'; }
+        else if (successRate >= 75) { badge.textContent = 'جيد جداً'; badge.className = 'success-badge grade-good'; }
+        else if (successRate >= 50) { badge.textContent = 'جيد'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = 'يحتاج تحسين'; badge.className = 'success-badge grade-fail'; }
+    } else {
+        if (successRate >= 90) { badge.textContent = 'Excellent'; badge.className = 'success-badge grade-excellent'; }
+        else if (successRate >= 75) { badge.textContent = 'Very Good'; badge.className = 'success-badge grade-good'; }
+        else if (successRate >= 50) { badge.textContent = 'Good'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = 'Needs Improvement'; badge.className = 'success-badge grade-fail'; }
+    }
+
+    document.getElementById('results-panel').classList.remove('hidden');
+    document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('sendEmailBtn').classList.remove('hidden');
+}
+
+function sendResultsToEmail() {
+    const btn = document.getElementById('sendEmailBtn');
+    const status = document.getElementById('emailStatus');
+    btn.disabled = true;
+    btn.textContent = currentLang === 'ar' ? '⏳ جاري الإرسال...' : '⏳ Sending...';
+
+    const name = document.getElementById('studentName').value || 'N/A';
+    const studentClass = document.getElementById('studentClass').value || 'N/A';
+    const date = document.querySelector('input[type="text"]').value || new Date().toLocaleDateString();
+    const score = document.getElementById('res-total').textContent;
+    const successRate = document.getElementById('success-percent').textContent;
+
+    const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+    const SERVICE_ID = "service_w15m64i";
+    const TEMPLATE_ID = "template_5b0u2tq";
+    const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+
+    emailjs.init(PUBLIC_KEY);
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+        to_email: TARGET_EMAIL, student_name: name, exam_date: date,
+        total_score: score, success_rate: successRate,
+        answers_table: `Score: ${score}, Rate: ${successRate}`
+    }).then(() => {
+        status.textContent = '✅ تم الإرسال بنجاح!';
+        status.style.color = '#059669';
+    }).catch(err => {
+        status.textContent = '❌ فشل الإرسال';
+        status.style.color = '#dc2626';
+        btn.disabled = false;
+    });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderExam();
+    startTimer();
+});
+</script>
+</body>
+</html>
